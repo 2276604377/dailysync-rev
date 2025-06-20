@@ -1,0 +1,18 @@
+name: Keepalive
+on:
+  schedule:
+    - cron: '0 0 */59 * *'  # 每59天UTC时间0点运行（北京时间8:00）
+  workflow_dispatch:      # 支持手动触发
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # 需写入权限
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make empty commit
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git commit --allow-empty -m "Auto-commit to keep repo active"
+          git push
